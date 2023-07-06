@@ -13,6 +13,7 @@ const linkValidation = require('./utils/linkValidation');
 const NotFoundError = require('./errors/NotFoundError');
 const handleErrors = require('./middlewares/handleErrors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const cors = require('./middlewares/cors');
 
 const {
   PORT = 3000,
@@ -34,6 +35,7 @@ const limits = rateLimit({
 app.use(limits);
 app.use(express.json());
 app.use(requestLogger); // подключаем логгер запросов
+app.use(cors); // проверяем CORS
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
