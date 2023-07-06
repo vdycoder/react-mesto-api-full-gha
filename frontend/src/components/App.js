@@ -17,7 +17,7 @@ import InfoTooltip from './InfoTooltip';//new in #12 sprint
 
 import '../index.css';
 import api from '../utils/api';
-import authApi from '../utils/authApi'; //new in #12 sprint
+//import authApi from '../utils/authApi'; //new in #12 sprint
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
@@ -168,7 +168,7 @@ function App() {
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
-      authApi.getUserInfo(jwt)
+      api.getUserInfo(jwt)
         .then(res => {
           if (res) {
             setIsLoggedIn(true)
@@ -185,7 +185,7 @@ function App() {
   }, [navigate, isLoggedIn]);
 
   function handleUserRegister(email, password) {
-    authApi.signupUser(email, password)
+    api.signupUser(email, password)
       .then(res => {
         if (res) {
           setIsSuccess(true);
@@ -201,7 +201,7 @@ function App() {
   }
 
   function handleUserLogin(email, password) {
-    authApi.signinUser(email, password)
+    api.signinUser(email, password)
       .then(res => {
         if (res) {
           setIsLoggedIn(true);

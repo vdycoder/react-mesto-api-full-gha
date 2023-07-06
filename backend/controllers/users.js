@@ -12,7 +12,8 @@ const ValidationError = require('../errors/ValidationError');
 const NotUniqueError = require('../errors/NotUniqueError');
 const NotFoundError = require('../errors/NotFoundError');
 
-const JWT_SECRET_KEY = 'super-duper-private-key';
+const { NODE_ENV, JWT_SECRET } = process.env;
+const JWT_DEV_SECRET_KEY = 'super-duper-private-key';
 const SALT_LENGTH = 10;
 
 const getUsers = (req, res, next) => {
@@ -165,7 +166,7 @@ const login = (req, res, next) => {
             } else {
               const token = jwt.sign(
                 { _id: user._id },
-                JWT_SECRET_KEY,
+                NODE_ENV === 'production' ? JWT_SECRET : JWT_DEV_SECRET_KEY,
                 { expiresIn: '7d' },
               );
               res.send({ jwt: token });

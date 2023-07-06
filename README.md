@@ -11,6 +11,6 @@
 
 IP-адрес 95.163.229.120
 
-Frontend https://...
+Frontend https://mesto.vdycoder.nomoreparties.sbs
 
-Backend https://...
+Backend https://api.mesto.vdycoder.nomoreparties.sbs

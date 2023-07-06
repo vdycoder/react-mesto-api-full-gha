@@ -20,12 +20,6 @@ class Api {
       })
     }
 
-    getUserInfo() {
-      return this._request(this._options.baseUrl + '/users/me', {
-        headers: this._options.headers
-      })
-    }
-
     updateUserInfo(newUserData) {
       return this._request(this._options.baseUrl + '/users/me', {
         method: 'PATCH',
@@ -71,15 +65,42 @@ class Api {
         })
       })
     }
+    signupUser(email, password) {
+      return this._request(this._options.baseUrl + '/signup', {
+        method: 'POST',
+        headers: this._options.headers,
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      })
+    }
+
+    signinUser(email, password) {
+      return this._request(this._options.baseUrl + '/signin', {
+        method: 'POST',
+        headers: this._options.headers,
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      })
+    }
+
+    getUserInfo(token) {
+      this._options.headers.Authorization = `Bearer ${token}`
+      return this._request(this._options.baseUrl + '/users/me', {
+        headers: this._options.headers
+      })
+    }
 
 }
 
 const api = new Api({
-    baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-63',
-    headers: {
-      authorization: 'd5678923-2b42-42e3-bf9c-7ef2ba66b460',
-      'Content-Type': 'application/json'
-    }
+  baseUrl: 'https://api.mesto.vdycoder.nomoreparties.sbs',
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
 export default api;
