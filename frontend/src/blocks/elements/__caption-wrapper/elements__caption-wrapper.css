@@ -1,0 +1,7 @@
+.elements__caption-wrapper {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0;
+  padding: 22px 15px 22px 21px;
+}

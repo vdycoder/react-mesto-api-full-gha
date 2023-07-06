@@ -1,0 +1,20 @@
+.header__nav-btn {
+  color: #A9A9A9;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: right;
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  transition: .2s;
+  outline: none;
+  cursor: pointer;
+}
+
+.header__nav-btn:hover {
+  opacity: .6;
+}

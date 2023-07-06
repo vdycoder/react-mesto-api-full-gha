@@ -1,0 +1,9 @@
+.auth__input-wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
