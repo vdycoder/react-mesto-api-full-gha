@@ -9,23 +9,22 @@ const auth = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    next(new UnauthorizedError('Требуется пройти авторизацию.'));
-  } else {
-    const token = authorization.replace('Bearer ', '');
-    let payload;
-
-    try {
-      payload = jwt.verify(
-        token,
-        NODE_ENV === 'production' ? JWT_SECRET : JWT_DEV_SECRET_KEY,
-      );
-    } catch (err) {
-      next(new UnauthorizedError('Требуется пройти авторизацию.'));
-    }
-    req.user = payload;
-    next();
+    return next(new UnauthorizedError('Требуется пройти авторизацию.'));
   }
-  next();
+
+  const token = authorization.replace('Bearer ', '');
+  let payload;
+
+  try {
+    payload = jwt.verify(
+      token,
+      NODE_ENV === 'production' ? JWT_SECRET : JWT_DEV_SECRET_KEY,
+    );
+  } catch (err) {
+    return next(new UnauthorizedError('Требуется пройти авторизацию.'));
+  }
+  req.user = payload;
+  return next();
 };
 
 module.exports = auth;

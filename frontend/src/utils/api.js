@@ -65,30 +65,8 @@ class Api {
         })
       })
     }
-    signupUser(email, password) {
-      return this._request(this._options.baseUrl + '/signup', {
-        method: 'POST',
-        headers: this._options.headers,
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      })
-    }
 
-    signinUser(email, password) {
-      return this._request(this._options.baseUrl + '/signin', {
-        method: 'POST',
-        headers: this._options.headers,
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      })
-    }
-
-    getUserInfo(token) {
-      this._options.headers.Authorization = `Bearer ${token}`
+    getUserInfo() {
       return this._request(this._options.baseUrl + '/users/me', {
         headers: this._options.headers
       })
@@ -99,6 +77,7 @@ class Api {
 const api = new Api({
   baseUrl: 'https://api.mesto.vdycoder.nomoreparties.sbs',
   headers: {
+    'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
     'Content-Type': 'application/json'
   }
 });

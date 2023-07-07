@@ -17,7 +17,7 @@ import InfoTooltip from './InfoTooltip';//new in #12 sprint
 
 import '../index.css';
 import api from '../utils/api';
-//import authApi from '../utils/authApi'; //new in #12 sprint
+import authApi from '../utils/authApi'; //new in #12 sprint
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
@@ -39,8 +39,33 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      Promise.all([
+        authApi.getUserInfo(jwt),
+        api.getInitialCards()
+      ])
+      .then(([userData, cardsData]) => {
+        setIsLoggedIn(true)
+        setEmail(userData.email)
+        //navigate('/', { replace: true })
+        //console.log(userData); // log
+        //console.log(cardsData); // log
+        setCurrentUser(userData);
+        setCards(cardsData);
+        })
+      .catch(err => {
+        console.log(err);
+      });
+    } else {
+      setIsLoggedIn(false)
+    }
+
+/*   if (isLoggedIn) {
+      Promise.all([
+        api.getUserInfo(),
+        api.getInitialCards()
+      ])
       .then(([userData, cardsData]) => {
         setCurrentUser(userData);
         setCards(cardsData);
@@ -49,6 +74,7 @@ function App() {
         console.log(err);
       });
     }
+ */
   }, [isLoggedIn]);
 
   function closeAllPopups () {
@@ -167,12 +193,12 @@ function App() {
   //Проверка токена и авторизация пользователя
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      api.getUserInfo(jwt)
+/*     if (jwt) {
+      authApi.getUserInfo(jwt)
         .then(res => {
           if (res) {
             setIsLoggedIn(true)
-            setEmail(res.data.email)
+            setEmail(res.email)
             navigate('/')
           }
         })
@@ -182,15 +208,38 @@ function App() {
     } else {
       setIsLoggedIn(false)
     }
+ */
+    if (jwt) {
+      Promise.all([
+        authApi.getUserInfo(jwt),
+        api.getInitialCards()
+      ])
+      .then(([userData, cardsData]) => {
+        setIsLoggedIn(true)
+        setEmail(userData.email)
+        navigate('/', { replace: true })
+        //console.log(userData); // log
+        //console.log(cardsData); // log
+        setCurrentUser(userData);
+        setCards(cardsData);
+        })
+      .catch(err => {
+        console.log(err);
+      });
+    } else {
+      setIsLoggedIn(false)
+    }
+
+
   }, [navigate, isLoggedIn]);
 
   function handleUserRegister(email, password) {
-    api.signupUser(email, password)
+    authApi.signupUser(email, password)
       .then(res => {
         if (res) {
           setIsSuccess(true);
           setIsInfoTooltipPopupOpen(true);
-          navigate('/sign-in');
+          navigate('/sign-in', { replace: true });
         }
       })
       .catch(err => {
@@ -201,12 +250,12 @@ function App() {
   }
 
   function handleUserLogin(email, password) {
-    api.signinUser(email, password)
+    authApi.signinUser(email, password)
       .then(res => {
         if (res) {
           setIsLoggedIn(true);
-          localStorage.setItem('jwt', res.token);
-          navigate('/');
+          localStorage.setItem('jwt', res.jwt);
+          navigate('/', { replace: true });
         }
       })
       .catch(err => {

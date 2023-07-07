@@ -1,9 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { celebrate, errors, Joi } = require('celebrate');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config();
 
 const userRoutes = require('./routes/users');
 const cardRoutes = require('./routes/cards');
@@ -12,8 +12,8 @@ const auth = require('./middlewares/auth');
 const linkValidation = require('./utils/linkValidation');
 const NotFoundError = require('./errors/NotFoundError');
 const handleErrors = require('./middlewares/handleErrors');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const {
   PORT = 3000,
@@ -26,6 +26,7 @@ mongoose.connect(DB_URL, {
 
 const app = express();
 app.use(helmet());
+app.use(cors); // проверяем CORS
 const limits = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
@@ -35,7 +36,6 @@ const limits = rateLimit({
 app.use(limits);
 app.use(express.json());
 app.use(requestLogger); // подключаем логгер запросов
-app.use(cors); // проверяем CORS
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');

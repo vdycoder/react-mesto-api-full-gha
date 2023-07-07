@@ -15,6 +15,7 @@ const cardSchema = new mongoose.Schema(
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       reference: 'user',
+      ref: 'user',
       required: true,
     },
     likes: {
@@ -22,6 +23,7 @@ const cardSchema = new mongoose.Schema(
         {
           type: mongoose.Schema.Types.ObjectId,
           reference: 'user',
+          ref: 'user',
         },
       ],
       default: [],

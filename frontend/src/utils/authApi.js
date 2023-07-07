@@ -36,18 +36,19 @@ class AuthApi {
     })
   }
 
-  getUserInfo(token) {
+   getUserInfo(token) {
     this._options.headers.Authorization = `Bearer ${token}`
     return this._request(this._options.baseUrl + '/users/me', {
       headers: this._options.headers
     })
   }
+
 }
 
 const authApi = new AuthApi({
-  baseUrl: 'https://auth.nomoreparties.co',
+  baseUrl: 'https://api.mesto.vdycoder.nomoreparties.sbs',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   }
 });
 

@@ -11,6 +11,7 @@ const Card = require('../models/card');
 
 const getCards = (req, res, next) => {
   Card.find({})
+    .populate(['owner', 'likes'])
     .then((cards) => res.send(cards))
     .catch((err) => {
       next(err);
@@ -71,7 +72,7 @@ const likeCardById = (req, res, next) => {
     cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true },
-  )
+  ).populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
         next(new NotFoundError(
@@ -99,7 +100,7 @@ const dislikeCardById = (req, res, next) => {
     cardId,
     { $pull: { likes: req.user._id } },
     { new: true },
-  )
+  ).populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
         next(new NotFoundError(
