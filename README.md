@@ -9,7 +9,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 95.163.229.120
+IP 95.163.229.120
 
 Frontend https://mesto.vdycoder.nomoreparties.sbs
 
