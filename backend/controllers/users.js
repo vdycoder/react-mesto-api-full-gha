@@ -7,8 +7,6 @@ const {
 
 const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
-const UnauthorizedError = require('../errors/UnauthorizedError');
-const ValidationError = require('../errors/ValidationError');
 const NotUniqueError = require('../errors/NotUniqueError');
 const NotFoundError = require('../errors/NotFoundError');
 
@@ -50,9 +48,14 @@ const getUserById = (req, res, next) => {
     });
 };
 
-const getUserMe = (req, res) => {
+const getUserMe = (req, res, next) => {
   const userId = req.user._id;
-  User.findById(userId).then((user) => res.send(user));
+  User
+    .findById(userId)
+    .then((user) => res.send(user))
+    .catch((err) => {
+      next(err);
+    });
 };
 
 const createUser = (req, res, next) => {
@@ -77,7 +80,7 @@ const createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError(
+        next(new BadRequestError(
           'Переданы некорректные данные при создании пользователя',
         ));
       } else if (err.code === 11000) {
@@ -110,7 +113,7 @@ const updateUserById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError(
+        next(new BadRequestError(
           'Переданы некорректные данные при обновлении профиля.',
         ));
       } else {
@@ -139,7 +142,7 @@ const updateAvatarById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError(
+        next(new BadRequestError(
           'Переданы некорректные данные при обновлении аватара.',
         ));
       } else {
@@ -150,29 +153,15 @@ const updateAvatarById = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
-  if (!email || !password) {
-    next(new BadRequestError());
-  }
-  User.findOne({ email }).select('+password')
+  User
+    .checkUserCredentials(email, password)
     .then((user) => {
-      if (!user) {
-        next(new UnauthorizedError());
-      } else {
-        bcrypt.compare(password, user.password)
-          .then((correctPassword) => {
-            if (!correctPassword) {
-              next(new UnauthorizedError());
-            } else {
-              const token = jwt.sign(
-                { _id: user._id },
-                NODE_ENV === 'production' ? JWT_SECRET : JWT_DEV_SECRET_KEY,
-                { expiresIn: '7d' },
-              );
-              res.send({ jwt: token });
-            }
-          });
-      }
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : JWT_DEV_SECRET_KEY,
+        { expiresIn: '7d' },
+      );
+      res.send({ jwt: token });
     })
     .catch((err) => {
       next(err);

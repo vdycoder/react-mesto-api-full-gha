@@ -1,10 +1,7 @@
 class BadRequestError extends Error {
   constructor(message) {
-    super(message);
+    super(message || 'Не переданы имя пользователя или пароль.');
     this.statusCode = 400;
-    this.message = (
-      message || 'Не переданы имя пользователя или пароль.'
-    );
   }
 }
 

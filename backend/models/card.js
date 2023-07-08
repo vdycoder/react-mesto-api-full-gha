@@ -1,16 +1,21 @@
 const mongoose = require('mongoose');
+const linkValidation = require('../utils/linkValidation');
 
 const cardSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      minlength: 2,
-      maxlength: 30,
-      required: true,
+      minlength: [2, 'Минимальная длина поля составляет 2 символа'],
+      maxlength: [30, 'Максимальная длина поля составляет 30 символов'],
+      required: [true, `Значение ${this.name} должно быть заполнено.`],
     },
     link: {
       type: String,
-      required: true,
+      required: [true, 'Значение URL изображения должно быть заполнено.'],
+      validate: {
+        validator: (url) => linkValidation.test(url),
+        message: 'Переданная строка не является URL изображения.',
+      },
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,

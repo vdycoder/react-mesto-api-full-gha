@@ -1,7 +1,6 @@
 const BadRequestError = require('../errors/BadRequestError');
 const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/NotFoundError');
-const ValidationError = require('../errors/ValidationError');
 
 const {
   STATUS_CREATED,
@@ -24,11 +23,13 @@ const createCard = (req, res, next) => {
 
   Card.create({ name, link, owner })
     .then((newCard) => {
-      res.status(STATUS_CREATED).send(newCard);
+      newCard
+        .populate('owner')
+        .then(() => res.status(STATUS_CREATED).send(newCard));
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError(
+        next(new BadRequestError(
           'Переданы некорректные данные при создании карточки.',
         ));
       } else {
@@ -40,7 +41,7 @@ const createCard = (req, res, next) => {
 const deleteCardById = (req, res, next) => {
   const { cardId } = req.params;
 
-  Card.findByIdAndRemove(cardId)
+  Card.findById(cardId)
     .then((card) => {
       if (!card) {
         next(new NotFoundError(
@@ -51,7 +52,7 @@ const deleteCardById = (req, res, next) => {
           'Не достаточно прав для удаления карточки',
         ));
       } else {
-        res.send(card);
+        card.deleteOne(card).then(() => res.send(card));
       }
     })
     .catch((err) => {

@@ -1,10 +1,7 @@
 class ForbiddenError extends Error {
   constructor(message) {
-    super(message);
+    super(message || 'Отказано в доступе.');
     this.statusCode = 403;
-    this.message = (
-      message || 'Отказано в доступе.'
-    );
   }
 }
 

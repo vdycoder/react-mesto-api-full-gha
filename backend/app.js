@@ -7,13 +7,16 @@ const rateLimit = require('express-rate-limit');
 
 const userRoutes = require('./routes/users');
 const cardRoutes = require('./routes/cards');
+
 const { login, createUser } = require('./controllers/users');
+
 const auth = require('./middlewares/auth');
-const linkValidation = require('./utils/linkValidation');
-const NotFoundError = require('./errors/NotFoundError');
 const handleErrors = require('./middlewares/handleErrors');
 const cors = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+
+const linkValidation = require('./utils/linkValidation');
+const NotFoundError = require('./errors/NotFoundError');
 
 const {
   PORT = 3000,
@@ -73,6 +76,4 @@ app.use(errorLogger); // подключаем логгер ошибок
 app.use(errors());
 app.use(handleErrors);
 
-app.listen(PORT, () => {
-  console.log(`Приложение запущено и принимает запросы на порт: ${PORT}`);
-});
+app.listen(PORT);

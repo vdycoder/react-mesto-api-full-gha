@@ -5,7 +5,7 @@ const handleErrors = (err, req, res, next) => {
     });
   } else {
     res.status(500).send({
-      message: err.message || 'Ошибка по умолчанию.',
+      message: 'Ошибка по умолчанию.',
     });
   }
   next();
