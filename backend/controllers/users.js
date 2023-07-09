@@ -10,9 +10,12 @@ const BadRequestError = require('../errors/BadRequestError');
 const NotUniqueError = require('../errors/NotUniqueError');
 const NotFoundError = require('../errors/NotFoundError');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
-const JWT_DEV_SECRET_KEY = 'super-duper-private-key';
-const SALT_LENGTH = 10;
+const {
+  NODE_ENV,
+  JWT_SECRET,
+  JWT_DEV_SECRET_KEY,
+  SALT_LENGTH,
+} = require('../config');
 
 const getUsers = (req, res, next) => {
   User.find({})
