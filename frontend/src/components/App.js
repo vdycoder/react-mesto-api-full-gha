@@ -38,44 +38,44 @@ function App() {
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      Promise.all([
-        authApi.getUserInfo(jwt),
-        api.getInitialCards()
-      ])
-      .then(([userData, cardsData]) => {
-        setIsLoggedIn(true)
-        setEmail(userData.email)
-        //navigate('/', { replace: true })
-        //console.log(userData); // log
-        //console.log(cardsData); // log
-        setCurrentUser(userData);
-        setCards(cardsData);
-        })
-      .catch(err => {
-        console.log(err);
-      });
-    } else {
-      setIsLoggedIn(false)
-    }
+//   useEffect(() => {
+//     const jwt = localStorage.getItem('jwt');
+//     if (jwt) {
+//       Promise.all([
+//         authApi.getUserInfo(jwt),
+//         api.getInitialCards()
+//       ])
+//       .then(([userData, cardsData]) => {
+//         setIsLoggedIn(true)
+//         setEmail(userData.email)
+//         //navigate('/', { replace: true })
+//         //console.log(userData); // log
+//         //console.log(cardsData); // log
+//         setCurrentUser(userData);
+//         setCards(cardsData);
+//         })
+//       .catch(err => {
+//         console.log(err);
+//       });
+//     } else {
+//       setIsLoggedIn(false)
+//     }
 
-/*   if (isLoggedIn) {
-      Promise.all([
-        api.getUserInfo(),
-        api.getInitialCards()
-      ])
-      .then(([userData, cardsData]) => {
-        setCurrentUser(userData);
-        setCards(cardsData);
-        })
-      .catch(err => {
-        console.log(err);
-      });
-    }
- */
-  }, [isLoggedIn]);
+// /*   if (isLoggedIn) {
+//       Promise.all([
+//         api.getUserInfo(),
+//         api.getInitialCards()
+//       ])
+//       .then(([userData, cardsData]) => {
+//         setCurrentUser(userData);
+//         setCards(cardsData);
+//         })
+//       .catch(err => {
+//         console.log(err);
+//       });
+//     }
+//  */
+//   }, [isLoggedIn]);
 
   function closeAllPopups () {
     setIsEditProfilePopupOpen(false);
@@ -211,7 +211,7 @@ function App() {
  */
     if (jwt) {
       Promise.all([
-        authApi.getUserInfo(jwt),
+        api.getUserInfo(),
         api.getInitialCards()
       ])
       .then(([userData, cardsData]) => {
