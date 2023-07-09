@@ -267,6 +267,7 @@ function App() {
 
   function handleUserLogout() {
     setIsLoggedIn(false);
+    setCurrentUser({});
     localStorage.removeItem('jwt');
     navigate('./sign-in', {replace: true})
   }
