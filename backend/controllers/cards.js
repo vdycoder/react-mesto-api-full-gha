@@ -52,7 +52,11 @@ const deleteCardById = (req, res, next) => {
           'Не достаточно прав для удаления карточки',
         ));
       } else {
-        card.deleteOne(card).then(() => res.send(card));
+        card.deleteOne(card)
+          .then(() => res.send(card))
+          .catch((err) => {
+            next(err);
+          });
       }
     })
     .catch((err) => {
