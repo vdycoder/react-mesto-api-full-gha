@@ -11,6 +11,7 @@ class Api {
     }
 
     _request(url, options) {
+      options.headers.Authorization = `Bearer ${localStorage.getItem('jwt')}`
       return fetch(url, options).then(this._checkResponse)
     }
 
@@ -76,8 +77,9 @@ class Api {
 
 const api = new Api({
   baseUrl: 'https://api.mesto.vdycoder.nomoreparties.sbs',
+  //baseUrl: 'http://localhost:3000',
   headers: {
-    'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+    //'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
     'Content-Type': 'application/json'
   }
 });

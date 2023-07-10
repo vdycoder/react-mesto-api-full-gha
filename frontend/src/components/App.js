@@ -38,44 +38,44 @@ function App() {
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      Promise.all([
-        api.getUserInfo(),
-        api.getInitialCards()
-      ])
-      .then(([userData, cardsData]) => {
-        setIsLoggedIn(true)
-        setEmail(userData.email)
-        //navigate('/', { replace: true })
-        //console.log(userData); // log
-        //console.log(cardsData); // log
-        setCurrentUser(userData);
-        setCards(cardsData);
-        })
-      .catch(err => {
-        console.log(err);
-      });
-    } else {
-      setIsLoggedIn(false)
-    }
+  // useEffect(() => {
+  //   const jwt = localStorage.getItem('jwt');
+  //   // if (jwt) {
+  //   //   Promise.all([
+  //   //     api.getUserInfo(),
+  //   //     api.getInitialCards()
+  //   //   ])
+  //   //   .then(([userData, cardsData]) => {
+  //   //     setIsLoggedIn(true)
+  //   //     setEmail(userData.email)
+  //   //     //navigate('/', { replace: true })
+  //   //     //console.log(userData); // log
+  //   //     //console.log(cardsData); // log
+  //   //     setCurrentUser(userData);
+  //   //     setCards(cardsData);
+  //   //     })
+  //   //   .catch(err => {
+  //   //     console.log(err);
+  //   //   });
+  //   // } else {
+  //   //   setIsLoggedIn(false)
+  //   // }
 
-/*   if (isLoggedIn) {
-      Promise.all([
-        api.getUserInfo(),
-        api.getInitialCards()
-      ])
-      .then(([userData, cardsData]) => {
-        setCurrentUser(userData);
-        setCards(cardsData);
-        })
-      .catch(err => {
-        console.log(err);
-      });
-    }
- */
-  }, [isLoggedIn]);
+  // if (isLoggedIn && jwt) {
+  //     Promise.all([
+  //       api.getUserInfo(),
+  //       api.getInitialCards()
+  //     ])
+  //     .then(([userData, cardsData]) => {
+  //       setEmail(userData.email)
+  //       setCurrentUser(userData);
+  //       setCards(cardsData);
+  //       })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  //   }
+  // }, [isLoggedIn]);
 
   function closeAllPopups () {
     setIsEditProfilePopupOpen(false);
@@ -218,8 +218,6 @@ function App() {
         setIsLoggedIn(true)
         setEmail(userData.email)
         navigate('/', { replace: true })
-        //console.log(userData); // log
-        //console.log(cardsData); // log
         setCurrentUser(userData);
         setCards(cardsData);
         })
@@ -266,9 +264,9 @@ function App() {
   }
 
   function handleUserLogout() {
+    localStorage.removeItem('jwt');
     setIsLoggedIn(false);
     setCurrentUser({});
-    localStorage.removeItem('jwt');
     navigate('./sign-in', {replace: true})
   }
 

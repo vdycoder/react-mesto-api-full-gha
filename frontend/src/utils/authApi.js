@@ -47,6 +47,7 @@ class AuthApi {
 
 const authApi = new AuthApi({
   baseUrl: 'https://api.mesto.vdycoder.nomoreparties.sbs',
+  //baseUrl: 'http://localhost:3000',
   headers: {
     'Content-Type': 'application/json',
   }
